@@ -1,5 +1,5 @@
 
-module.exports = function(lang, regex) {
+module.exports = function(message, regex) {
   return {
     meta: {
       type: 'suggestion',
@@ -90,7 +90,7 @@ module.exports = function(lang, regex) {
       const report = function(node, val) {
         context.report({
           node: node,
-          message: `Using ${lang} characters: {{ character }}`,
+          message: `Using ${message} characters: {{ character }}`,
           data: {
             character: val,
           },
