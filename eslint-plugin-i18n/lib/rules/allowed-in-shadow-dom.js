@@ -1,9 +1,50 @@
 
 'use strict';
 
-const define = require('../utils/define');
+module.exports = {
+    create(context) {
+        const FORBIDDEN_METHODS = ['getElementById', 'querySelector'];
 
-const message = 'Not Allowed In Shadow DOM';
-const regex = /document\.querySelector|document\.getElementById|DomDocumentHelper\.getDocument\(\)\.querySelector|DomDocumentHelper\.getDocument\(\)\.getElementById/;
+        return {
+            MemberExpression(node) {
+                const methodName = node.property.name;
 
-module.exports = define(message, regex);
+                if (!FORBIDDEN_METHODS.includes(methodName)) {
+                    return;
+                }
+
+                if (node.object.type === 'Identifier' && node.object.name === 'document') {
+                    context.report({ 
+                        node, 
+                        message: `'document.${methodName}' is not allowed in Shadow DOM context.` 
+                    });
+                    return;
+                }
+
+                if (node.object.type === 'CallExpression') {
+                    const callee = node.object.callee;
+                    
+                    if (callee.type === 'Identifier' && callee.name === 'getDocument') {
+                         context.report({ 
+                            node, 
+                            message: `'getDocument().${methodName}' is not allowed in Shadow DOM context.` 
+                        });
+                        return;
+                    }
+                    
+                    if (
+                        callee.type === 'MemberExpression' &&
+                        callee.object.name === 'DomDocumentHelper' &&
+                        callee.property.name === 'getDocument'
+                    ) {
+                         context.report({ 
+                            node, 
+                            message: `'DomDocumentHelper.getDocument().${methodName}' is not allowed in Shadow DOM context.` 
+                        });
+                        return;
+                    }
+                }
+            },
+        };
+    }
+};
