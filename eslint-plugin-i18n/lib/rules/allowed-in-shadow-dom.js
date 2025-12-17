@@ -16,7 +16,7 @@ module.exports = {
                 if (node.object.type === 'Identifier' && node.object.name === 'document') {
                     context.report({ 
                         node, 
-                        message: `'document.${methodName}' is not allowed in Shadow DOM context.` 
+                        message: `'document.${methodName}' is not allowed in Shadow DOM context. Use querySelector on el.getRootNode() or current elementRoot instead.` 
                     });
                     return;
                 }
@@ -27,7 +27,7 @@ module.exports = {
                     if (callee.type === 'Identifier' && callee.name === 'getDocument') {
                          context.report({ 
                             node, 
-                            message: `'getDocument().${methodName}' is not allowed in Shadow DOM context.` 
+                            message: `'getDocument().${methodName}' is not allowed in Shadow DOM context. Use querySelector on el.getRootNode() or current elementRoot instead.` 
                         });
                         return;
                     }
@@ -39,7 +39,7 @@ module.exports = {
                     ) {
                          context.report({ 
                             node, 
-                            message: `'DomDocumentHelper.getDocument().${methodName}' is not allowed in Shadow DOM context.` 
+                            message: `'DomDocumentHelper.getDocument().${methodName}' is not allowed in Shadow DOM context. Use querySelector on el.getRootNode() or current elementRoot instead.` 
                         });
                         return;
                     }
