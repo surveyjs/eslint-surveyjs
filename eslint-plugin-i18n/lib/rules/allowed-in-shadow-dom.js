@@ -3,7 +3,7 @@
 
 module.exports = {
     create(context) {
-        const FORBIDDEN_METHODS = ['getElementById', 'querySelector'];
+        const FORBIDDEN_METHODS = ['getElementById', 'querySelector', 'querySelectorAll'];
 
         return {
             MemberExpression(node) {
@@ -16,7 +16,7 @@ module.exports = {
                 if (node.object.type === 'Identifier' && node.object.name === 'document') {
                     context.report({ 
                         node, 
-                        message: `'document.${methodName}' is not allowed in Shadow DOM context. Use querySelector on el.getRootNode() or current elementRoot instead.` 
+                        message: `'document.${methodName}' is not allowed in Shadow DOM context. Use querySelector or querySelectorAll on el.getRootNode() or current elementRoot instead.` 
                     });
                     return;
                 }
