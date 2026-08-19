@@ -1,3 +1,5 @@
+const noUnguardedDomHelper = require("./rules/no-unguarded-dom-helper");
+
 const testOnlyMessage = " :( please don't forget to remove 'test.only' testcafe statement it will disable all other tests :( ";
 const debugMessage = " :( please don't forget to remove 'debug()'  :( ";
 const entriesMessage = "import from 'entries' folder needs to be replaced. Use another path."
@@ -26,6 +28,7 @@ module.exports = {
         }
       }
     }),
+    "no-unguarded-dom-helper": noUnguardedDomHelper,
     "no-imports-from-entries": context =>
       ({
         ImportDeclaration: function (node) {
