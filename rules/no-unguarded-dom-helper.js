@@ -21,21 +21,11 @@ function isNullish(node) {
   return node.type === "Identifier" && node.name === "undefined";
 }
 
-function isTypeofVar(node, name) {
-  return !!node && node.type === "UnaryExpression" && node.operator === "typeof" && isVar(node.argument, name);
-}
-
-function isUndefinedString(node) {
-  return !!node && node.type === "Literal" && node.value === "undefined";
-}
-
 function comparesToNullish(node, name, operators) {
   if (!node || node.type !== "BinaryExpression") return false;
   if (operators.indexOf(node.operator) === -1) return false;
   if (isVar(node.left, name) && isNullish(node.right)) return true;
   if (isVar(node.right, name) && isNullish(node.left)) return true;
-  if (isTypeofVar(node.left, name) && isUndefinedString(node.right)) return true;
-  if (isTypeofVar(node.right, name) && isUndefinedString(node.left)) return true;
   return false;
 }
 
